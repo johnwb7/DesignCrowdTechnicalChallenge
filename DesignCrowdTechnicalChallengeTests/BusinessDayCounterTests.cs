@@ -47,7 +47,7 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
-        public void WeekdaysBetweenTwoDates_SecondDateIsAWeekend_CalculatesNumberOfWeekdaysbetweenTwoDates()
+        public void WeekdaysBetweenTwoDates_WhenSecondDateIsAWeekend_CalculatesNumberOfWeekdaysbetweenTwoDates()
         {
             // Arrange
             var firstDate = new DateTime(2013, 1, 24);
