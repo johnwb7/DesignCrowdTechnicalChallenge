@@ -11,11 +11,13 @@ namespace DesignCrowdTechnicalChallenge
         public int WeekdaysBetweenTwoDates(DateTime firstDate, DateTime secondDate)
         {
             //todo
+            return -1;
         }
         public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime>
         publicHolidays)
         {
             //todo
+            return -1;
         }
     }
 }
