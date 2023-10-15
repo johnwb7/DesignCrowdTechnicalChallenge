@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DesignCrowdTechnicalChallenge.Extensions;
+using DesignCrowdTechnicalChallenge.PublicHolidayRules;
 
 namespace DesignCrowdTechnicalChallenge
 {
@@ -19,11 +16,11 @@ namespace DesignCrowdTechnicalChallenge
             var totalFullWeeks = totalDays / DaysInWeek;
             var totalWeekdaysFromFullWeeks = totalFullWeeks * WeekdaysInWeek;
 
-            var firstDateDayOfWeek = GetClosestPriorWeekday(firstDate);
-            var secondDateDayOfWeek = GetClosestPriorWeekday(secondDate);
+            var firstDateDayOfWeek = ToWeekdayOrFriday(firstDate);
+            var secondDateDayOfWeek = ToWeekdayOrFriday(secondDate);
             if (secondDateDayOfWeek <= firstDateDayOfWeek) secondDateDayOfWeek += WeekdaysInWeek;
 
-            var totalWeekdaysFromPartialWeek = IsWeekendDay(secondDate) ? 
+            var totalWeekdaysFromPartialWeek = secondDate.IsWeekendDay() ? 
                 secondDateDayOfWeek - firstDateDayOfWeek :
                 secondDateDayOfWeek - firstDateDayOfWeek - 1; // -1 to exclude second date from result
             var totalWeekdays = totalWeekdaysFromFullWeeks + totalWeekdaysFromPartialWeek;
@@ -42,9 +39,14 @@ namespace DesignCrowdTechnicalChallenge
             return totalBusinessDays;
         }
 
-        private int GetClosestPriorWeekday(DateTime dateTime) => IsWeekendDay(dateTime) ? (int)DayOfWeek.Friday : (int)dateTime.DayOfWeek;
-        private bool IsWeekendDay(DateTime dateTime) => dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday;
-        private bool IsRelevantPublicHoliday(DateTime firstDate, DateTime secondDate, DateTime publicHoliday) => publicHoliday > firstDate && publicHoliday < secondDate && !IsWeekendDay(publicHoliday);
+        public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<PublicHoliday> publicHolidays)
+        {
+            var publicHolidayDates = publicHolidays.Select(ph => ph.Date).ToList();
+            return BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidayDates);
+        }
+
+        private int ToWeekdayOrFriday(DateTime dateTime) => dateTime.IsWeekendDay() ? (int)DayOfWeek.Friday : (int)dateTime.DayOfWeek;
+        private bool IsRelevantPublicHoliday(DateTime firstDate, DateTime secondDate, DateTime publicHoliday) => publicHoliday > firstDate && publicHoliday < secondDate && !publicHoliday.IsWeekendDay();
 
 
     }

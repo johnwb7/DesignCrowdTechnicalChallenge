@@ -1,4 +1,5 @@
 using DesignCrowdTechnicalChallenge;
+using DesignCrowdTechnicalChallenge.PublicHolidayRules;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -221,6 +222,126 @@ namespace DesignCrowdTechnicalChallengeTests
             var publicHolidays = new DateTime[] {
                 new DateTime(2013, 12, 25),
                 new DateTime(2013, 12, 26)
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(date, date, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreWeekdayPublicHolidaysBetweenTwoDates_ExcludesPublicHolidaysFromNumberOfBusinessDays()
+        {
+            // Arrange
+            var firstDate = new DateTime(2023, 10, 9);
+            var secondDate = new DateTime(2023, 10, 16);
+            var publicHolidays = new PublicHoliday[] {
+                new FixedDatePublicHoliday("APublicHoliday", new DateTime(2023, 10, 10))
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenNoPublicHolidays_CalculatesNumberOfBusinessDays()
+        {
+            // Arrange
+            var firstDate = new DateTime(2013, 10, 7);
+            var secondDate = new DateTime(2013, 10, 9);
+            var publicHolidays = Array.Empty<PublicHoliday>();
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreWeekendPublicHolidaysBetweenTwoDates_IgnoresPublicHolidaysWhenCalculatingNumberOfBusinessDays()
+        {
+            // Arrange
+            var firstDate = new DateTime(2023, 9, 7);
+            var secondDate = new DateTime(2023, 9, 27);
+            var publicHolidays = new PublicHoliday[] {
+                new FixedDatePublicHoliday("APublicHoliday", new DateTime(2023, 9, 16)),
+                new FixedDatePublicHoliday("AnotherPublicHoliday", new DateTime(2023, 9, 24))
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(13));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreWeekdayPublicHolidaysBeforeOrEqualToFirstDate_IgnoresPublicHolidaysWhenCalculatingNumberOfBusinessDays()
+        {
+            // Arrange
+            var firstDate = new DateTime(2013, 12, 26);
+            var secondDate = new DateTime(2013, 12, 30);
+            var publicHolidays = new PublicHoliday[] {
+                new FixedDatePublicHoliday("APublicHoliday", new DateTime(2013, 12, 25)),
+                new NextWeekdayPublicHoliday("AnotherPublicHoliday", new DateTime(2013, 12, 26))
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreWeekdayPublicHolidaysAfterOrEqualToSecondDate_IgnoresPublicHolidaysWhenCalculatingNumberOfBusinessDays()
+        {
+            // Arrange
+            var firstDate = new DateTime(2013, 10, 7);
+            var secondDate = new DateTime(2014, 1, 1);
+            var publicHolidays = new PublicHoliday[] {
+                new NextWeekdayPublicHoliday("APublicHoliday", new DateTime(2014, 1, 1))
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(61));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenSecondDateIsOlderThanFirstDate_ReturnsZero()
+        {
+            // Arrange
+            var firstDate = new DateTime(2013, 12, 24);
+            var secondDate = new DateTime(2013, 12, 7);
+            var publicHolidays = new PublicHoliday[] {
+                new NextWeekdayPublicHoliday("APublicHoliday", new DateTime(2015, 2, 8)),
+                new FixedDatePublicHoliday("AnotherPublicHoliday", new DateTime(2015, 2, 1))
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenSecondDateIsEqualToFirstDate_ReturnsZero()
+        {
+            // Arrange
+            var date = new DateTime(2013, 12, 24);
+            var publicHolidays = new PublicHoliday[] {
+                new NextWeekdayPublicHoliday("APublicHoliday", new DateTime(2023, 11, 1)),
+                new FixedDatePublicHoliday("AnotherPublicHoliday", new DateTime(2023, 11, 1))
             };
 
             // Act
