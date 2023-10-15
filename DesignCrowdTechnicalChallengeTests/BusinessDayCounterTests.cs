@@ -129,6 +129,24 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
+        public void BusinessDaysBetweenTwoDates_WhenThereAreDuplicateWeekdayPublicHolidaysBetweenTwoDates_ExcludesEachDistinctPublicHolidaysOnlyOnce()
+        {
+            // Arrange
+            var firstDate = new DateTime(2023, 10, 9);
+            var secondDate = new DateTime(2023, 10, 16);
+            var publicHolidays = new DateTime[] {
+                new DateTime(2023, 10, 10),
+                new DateTime(2023, 10, 10)
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(3));
+        }
+
+    [Test]
         public void BusinessDaysBetweenTwoDates_WhenNoPublicHolidays_CalculatesNumberOfBusinessDays()
         {
             // Arrange
@@ -239,6 +257,24 @@ namespace DesignCrowdTechnicalChallengeTests
             var secondDate = new DateTime(2023, 10, 16);
             var publicHolidays = new PublicHoliday[] {
                 new FixedDatePublicHoliday("APublicHoliday", new DateTime(2023, 10, 10))
+            };
+
+            // Act
+            var result = _sut.BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidays);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreDuplicateWeekdayPublicHolidaysBetweenTwoDates_ExcludesEachDistinctPublicHolidayOnce()
+        {
+            // Arrange
+            var firstDate = new DateTime(2023, 10, 9);
+            var secondDate = new DateTime(2023, 10, 16);
+            var publicHolidays = new PublicHoliday[] {
+                new FixedDatePublicHoliday("APublicHoliday", new DateTime(2023, 10, 10)),
+                new NextWeekdayPublicHoliday("AnotherPublicHoliday", new DateTime(2023, 10, 10))
             };
 
             // Act
