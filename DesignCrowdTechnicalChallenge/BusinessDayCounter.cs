@@ -29,15 +29,23 @@ namespace DesignCrowdTechnicalChallenge
             var totalWeekdays = totalWeekdaysFromFullWeeks + totalWeekdaysFromPartialWeek;
             return totalWeekdays;
         }
-        public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime>
-        publicHolidays)
+        public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime>publicHolidays)
         {
-            //todo
-            return -1;
+            if (secondDate <= firstDate) return 0;
+
+            var relevantPublicHolidays = publicHolidays
+                .Where(ph => IsRelevantPublicHoliday(firstDate, secondDate, ph))
+                .ToList();
+
+            var totalWeekdays = WeekdaysBetweenTwoDates(firstDate, secondDate);
+            var totalBusinessDays = totalWeekdays - relevantPublicHolidays.Count;
+            return totalBusinessDays;
         }
 
         private int GetClosestPriorWeekday(DateTime dateTime) => IsWeekendDay(dateTime) ? (int)DayOfWeek.Friday : (int)dateTime.DayOfWeek;
         private bool IsWeekendDay(DateTime dateTime) => dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday;
+        private bool IsRelevantPublicHoliday(DateTime firstDate, DateTime secondDate, DateTime publicHoliday) => publicHoliday > firstDate && publicHoliday < secondDate && !IsWeekendDay(publicHoliday);
+
 
     }
 }

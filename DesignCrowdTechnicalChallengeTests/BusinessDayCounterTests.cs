@@ -18,18 +18,18 @@ namespace DesignCrowdTechnicalChallengeTests
             new object[] { new DateTime(2023, 10, 12), new DateTime(2023, 10, 25), 8},
         };
 
+        private static readonly DateTime[] PublicHolidays =
+{
+            new(2013, 12, 25),
+            new(2013, 12, 26),
+            new(2014, 1, 1)
+        };
+
         private static readonly object[][] BusinessDaysBetweenTwoDatesTestCases =
         {
             // { firstDate, secondDate, publicHoliday, expectedResult }
             new object[] { new DateTime(2013, 12, 24), new DateTime(2013, 12, 27), PublicHolidays, 0 },
             new object[] { new DateTime(2013, 1, 24), new DateTime(2013, 2, 10), new DateTime[] { new (2013, 1, 28)}, 10 }
-        };
-
-        private static readonly DateTime[] PublicHolidays =
-        {
-            new(2013, 12, 25),
-            new(2013, 12, 26),
-            new(2014, 1, 1)
         };
 
         [SetUp]
