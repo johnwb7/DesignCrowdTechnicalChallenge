@@ -27,7 +27,7 @@ If ```secondDate``` is equal to or before ```firstDate```, the returned value wi
 #### BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<PublicHoliday> publicHolidays)
 An overload for this method that accepts an ```IList``` of the ```PublicHoliday``` base class. Further information on this class can be found below
 
-## PublicHoliday.cs
+## ```PublicHoliday.cs```
 An abstract base class for representing different types of public holidays and the rules that are used when calculating their date. Custom public holiday rules can be implemented by inheriting from this class.
 This class contains the following properties:
   - ```Name```: ```string``` The name of the public holiday e.g. "Christmas Day"

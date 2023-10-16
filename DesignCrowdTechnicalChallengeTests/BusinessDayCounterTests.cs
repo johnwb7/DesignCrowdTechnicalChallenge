@@ -28,7 +28,7 @@ namespace DesignCrowdTechnicalChallengeTests
 
         private static readonly object[][] BusinessDaysBetweenTwoDatesTestCases =
         {
-            // { firstDate, secondDate, publicHoliday, expectedResult }
+            // { firstDate, secondDate, publicHolidays, expectedResult }
             new object[] { new DateTime(2013, 12, 24), new DateTime(2013, 12, 27), PublicHolidays, 0 },
             new object[] { new DateTime(2013, 1, 24), new DateTime(2013, 2, 10), new DateTime[] { new (2013, 1, 28)}, 10 }
         };
@@ -50,7 +50,7 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
-        public void WeekdaysBetweenTwoDates_WhenFirstDateAndSecondDateAreTheSameWeekday_CalculatesNumberOfWeekdaysbetweenTwoDates()
+        public void WeekdaysBetweenTwoDates_WhenFirstDateAndSecondDateAreTheSameWeekday_CalculatesNumberOfWeekdaysBetweenTwoDates()
         {
             // Arrange
             var firstDate = new DateTime(2023, 09, 14);
@@ -64,7 +64,7 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
-        public void WeekdaysBetweenTwoDates_WhenSecondDateIsAWeekend_CalculatesNumberOfWeekdaysbetweenTwoDates()
+        public void WeekdaysBetweenTwoDates_WhenSecondDateIsAWeekend_CalculatesNumberOfWeekdaysBetweenTwoDates()
         {
             // Arrange
             var firstDate = new DateTime(2013, 1, 24);
@@ -129,7 +129,7 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
-        public void BusinessDaysBetweenTwoDates_WhenThereAreDuplicateWeekdayPublicHolidaysBetweenTwoDates_ExcludesEachDistinctPublicHolidaysOnlyOnce()
+        public void BusinessDaysBetweenTwoDates_WhenThereAreDuplicateWeekdayPublicHolidaysBetweenTwoDates_ExcludesEachDistinctPublicHolidayOnlyOnce()
         {
             // Arrange
             var firstDate = new DateTime(2023, 10, 9);
@@ -204,7 +204,8 @@ namespace DesignCrowdTechnicalChallengeTests
             var firstDate = new DateTime(2013, 10, 7);
             var secondDate = new DateTime(2014, 1, 1);
             var publicHolidays = new DateTime[] {
-                new DateTime(2014, 1, 1)
+                new DateTime(2014, 1, 1),
+                new DateTime(2014, 1, 2)
             };
 
             // Act
@@ -342,7 +343,8 @@ namespace DesignCrowdTechnicalChallengeTests
             var firstDate = new DateTime(2013, 10, 7);
             var secondDate = new DateTime(2014, 1, 1);
             var publicHolidays = new PublicHoliday[] {
-                new NextWeekdayPublicHoliday("APublicHoliday", new DateTime(2014, 1, 1))
+                new NextWeekdayPublicHoliday("APublicHoliday", new DateTime(2014, 1, 1)),
+                new NextWeekdayPublicHoliday("AnotherPublicHoliday", new DateTime(2014, 1, 2))
             };
 
             // Act

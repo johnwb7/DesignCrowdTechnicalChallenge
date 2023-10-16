@@ -16,8 +16,8 @@ namespace DesignCrowdTechnicalChallenge
             var totalFullWeeks = totalDays / DaysInWeek;
             var totalWeekdaysFromFullWeeks = totalFullWeeks * WeekdaysInWeek;
 
-            var firstDateDayOfWeek = GetWeekdayOrFriday(firstDate);
-            var secondDateDayOfWeek = GetWeekdayOrFriday(secondDate);
+            var firstDateDayOfWeek = GetWeekdayOrFridayAsInt(firstDate);
+            var secondDateDayOfWeek = GetWeekdayOrFridayAsInt(secondDate);
             if (secondDateDayOfWeek <= firstDateDayOfWeek) secondDateDayOfWeek += WeekdaysInWeek;
 
             var totalWeekdaysFromPartialWeek = secondDate.IsWeekendDay() ? 
@@ -47,7 +47,7 @@ namespace DesignCrowdTechnicalChallenge
             return BusinessDaysBetweenTwoDates(firstDate, secondDate, publicHolidayDates);
         }
 
-        private int GetWeekdayOrFriday(DateTime dateTime) => dateTime.IsWeekendDay() ? (int)DayOfWeek.Friday : (int)dateTime.DayOfWeek;
+        private int GetWeekdayOrFridayAsInt(DateTime dateTime) => dateTime.IsWeekendDay() ? (int)DayOfWeek.Friday : (int)dateTime.DayOfWeek;
         private bool IsRelevantPublicHoliday(DateTime firstDate, DateTime secondDate, DateTime publicHoliday) => publicHoliday > firstDate && publicHoliday < secondDate && !publicHoliday.IsWeekendDay();
 
 
