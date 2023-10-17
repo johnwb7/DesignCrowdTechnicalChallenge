@@ -129,14 +129,14 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
-        public void BusinessDaysBetweenTwoDates_WhenThereAreDuplicateWeekdayPublicHolidaysBetweenTwoDates_ExcludesEachDistinctPublicHolidayOnlyOnce()
+        public void BusinessDaysBetweenTwoDates_WhenThereAreDuplicateWeekdayPublicHolidayDates_ExcludesEachDistinctPublicHolidayOnlyOnce()
         {
             // Arrange
             var firstDate = new DateTime(2023, 10, 9);
             var secondDate = new DateTime(2023, 10, 16);
             var publicHolidays = new DateTime[] {
-                new DateTime(2023, 10, 10),
-                new DateTime(2023, 10, 10)
+                new DateTime(2023, 10, 10, 1, 1, 1),
+                new DateTime(2023, 10, 10, 8, 35, 23)
             };
 
             // Act
@@ -146,7 +146,7 @@ namespace DesignCrowdTechnicalChallengeTests
             Assert.That(result, Is.EqualTo(3));
         }
 
-    [Test]
+        [Test]
         public void BusinessDaysBetweenTwoDates_WhenNoPublicHolidays_CalculatesNumberOfBusinessDays()
         {
             // Arrange
@@ -268,14 +268,14 @@ namespace DesignCrowdTechnicalChallengeTests
         }
 
         [Test]
-        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreDuplicateWeekdayPublicHolidaysBetweenTwoDates_ExcludesEachDistinctPublicHolidayOnce()
+        public void BusinessDaysBetweenTwoDatesOverload_WhenThereAreDuplicateWeekdayPublicHolidayDates_ExcludesEachDistinctPublicHolidayOnce()
         {
             // Arrange
             var firstDate = new DateTime(2023, 10, 9);
             var secondDate = new DateTime(2023, 10, 16);
             var publicHolidays = new PublicHoliday[] {
-                new FixedDatePublicHoliday("APublicHoliday", new DateTime(2023, 10, 10)),
-                new NextWeekdayPublicHoliday("AnotherPublicHoliday", new DateTime(2023, 10, 10))
+                new FixedDatePublicHoliday("APublicHoliday", new DateTime(2023, 10, 10, 9, 7, 6)),
+                new NextWeekdayPublicHoliday("AnotherPublicHoliday", new DateTime(2023, 10, 10, 3, 4, 5))
             };
 
             // Act

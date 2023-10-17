@@ -27,13 +27,14 @@ namespace DesignCrowdTechnicalChallenge
             var totalWeekdays = totalWeekdaysFromFullWeeks + totalWeekdaysFromPartialWeek;
             return totalWeekdays;
         }
-        public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime>publicHolidays)
+        public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime> publicHolidays)
         {
             if (secondDate <= firstDate) return 0;
 
             var relevantPublicHolidays = publicHolidays
-                .Distinct()
                 .Where(ph => IsRelevantPublicHoliday(firstDate, secondDate, ph))
+                .Select(ph => ph.Date)
+                .Distinct()
                 .ToList();
 
             var totalWeekdays = WeekdaysBetweenTwoDates(firstDate, secondDate);
